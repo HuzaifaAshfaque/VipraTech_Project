@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.conf import settings  # ✅ better for referencing the active user model
+from django.conf import settings  
 
 
 class CustomUserManager(BaseUserManager):
@@ -29,7 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []  # no username required
+    REQUIRED_FIELDS = []  
 
     objects = CustomUserManager()
 
@@ -49,7 +49,7 @@ class Product(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # <-- use this
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

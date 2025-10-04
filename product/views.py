@@ -16,12 +16,12 @@ from django.db.models import Prefetch
 # Stripe API key
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# ----------------- AUTH VIEWS -----------------
+# ----------------- SIGNUP VIEWS -----------------
 
 def signup(request):
     storage = messages.get_messages(request)
     for _ in storage:
-        pass  # iterating clears old messages
+        pass  
 
 
     if request.method == "POST":
@@ -46,6 +46,8 @@ def signup(request):
     return render(request, "product/signup.html")
 
 
+# ----------------- LOGIN VIEWS -----------------
+
 def login(request):
     
     if request.method == "POST":
@@ -66,6 +68,8 @@ def login(request):
 
     return render(request, "product/login.html")
 
+
+# ----------------- LOGOUT VIEWS -----------------
 
 def logout(request):
     storage = messages.get_messages(request)
@@ -92,8 +96,6 @@ def login_required_session(view_func):
 
 # ----------------- PRODUCT VIEWS -----------------
 
-from django.db.models import Prefetch
-
 class ProductListView(View):
     def get(self, request):
         user_id = request.session.get("user_id")
@@ -118,6 +120,7 @@ class ProductListView(View):
         })
 
 
+# ----------------- CHECKOUT VIEWS -----------------
 
 @login_required_session
 def checkout_view(request, product_id):
@@ -125,6 +128,7 @@ def checkout_view(request, product_id):
     return render(request, "product/checkout.html", {"product": product})
 
 
+# ----------------- SUCCESS VIEWS -----------------
 
 def success(request):
     storage = messages.get_messages(request)
@@ -135,6 +139,7 @@ def success(request):
     messages.success(request, "Payment successful!")
     return redirect(reverse("product_list"))
 
+# ----------------- CANCEL VIEWS -----------------
 
 def cancel(request):
     storage = messages.get_messages(request)

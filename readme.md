@@ -82,7 +82,7 @@ Stock is updated only after successful payment.
 
 ## AI Tools Used
 
-- **ChatGPT**: Assisted in optimizing Django queries (`prefetch_related`) and fixing stripe webhook logic.
+- **ChatGPT**: Assisted in optimizing Django queries in `productlist`, fixing Stripe webhook logic, and providing `admin.py` for `CustomUser`.
                ChatGPT also helped draft this `README.md`.
 
 - **Claude**: After completing the project, assisted in enhancing frontend templates, as it provides strong recommendations for UI/UX 

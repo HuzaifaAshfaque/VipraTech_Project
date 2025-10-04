@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Product,Order, CustomUser
-# Register your models here.
 
 
 @admin.register(Product)
@@ -26,13 +25,11 @@ class CustomUserAdmin(UserAdmin):
     list_display = ("email", "first_name", "last_name")
     search_fields = ("email", "first_name", "last_name")
 
-    # Fields to display when viewing/changing a user
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         ("Personal info", {"fields": ("first_name", "last_name")}),
     )
 
-    # Fields to display when creating a new user
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
