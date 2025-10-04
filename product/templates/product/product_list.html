@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid px-4 py-5">
+    <!-- Toast Notifications -->
+    {% if messages %}
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+            {% for message in messages %}
+            <div 
+                class="toast align-items-center border-0 mb-2 shadow-lg
+                    {% if message.tags == 'success' %}bg-success{% endif %}
+                    {% if message.tags == 'error' %}bg-danger{% endif %}
+                    {% if message.tags == 'warning' %}bg-warning text-dark{% endif %} text-white" 
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body fw-medium">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <!-- Order Summary Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 sticky-top" style="top: 20px;">
+                <div class="card-header border-0 py-3 text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;">
+                    <h5 class="mb-0 fw-bold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-check me-2" viewBox="0 0 16 16">
+                            <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                        </svg>
+                        Paid Orders
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    {% if paid_orders %}
+                        <div class="mb-3">
+                            {% for order in paid_orders %}
+                                <div class="d-flex justify-content-between align-items-start mb-3 pb-3 border-bottom">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 fw-semibold">{{ order.product.name }}</h6>
+                                        <small class="text-muted">Qty: {{ order.quantity }}</small>
+                                    </div>
+                                    <span class="fw-bold text-dark">${{ order.amount|floatformat:2 }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="bg-light rounded-3 p-3 mt-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fs-5 fw-bold">Total</span>
+                                <span class="fs-4 fw-bold text-primary">${{ total_paid|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-cart-x text-muted mb-3" viewBox="0 0 16 16">
+                                <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793z"/>
+                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                            <p class="text-muted mb-0">No orders yet</p>
+                            <small class="text-muted">Start shopping below!</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">Our Products</h2>
+                <p class="text-muted">Discover our amazing collection</p>
+            </div>
+            
+            <div class="row g-4">
+                {% for product in products %}
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden hover-lift" style="transition: all 0.3s ease;">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="mb-3">
+                                    <h5 class="card-title fw-bold mb-2">{{ product.name }}</h5>
+                                    <p class="card-text text-secondary small mb-3">{{ product.description }}</p>
+                                </div>
+                                
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fs-4 fw-bold text-primary">${{ product.price }}</span>
+                                    </div>
+
+                                    <form method="get" action="{% url 'checkout' product.id %}">
+                                        <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-semibold" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check me-2" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                                            </svg>
+                                            Buy Now
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15)!important;
+    }
+</style>
+
+
+{% endblock content %}
